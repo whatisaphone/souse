@@ -53,10 +53,10 @@ namespace MouseAhead
 		public void GotAudioData(object sender, AudioDataEventArgs e)
 		{
 			var cons = AudioAnalyzer.DetermineConsonant(e.Data);
-			if (cons != curConsonant)
+			if (cons._1 != curConsonant)
 			{
-				ConsonantChanged(this, new ConsonantChangedEventArgs(curConsonant, cons));
-				curConsonant = cons;
+				ConsonantChanged(this, new ConsonantChangedEventArgs(curConsonant, cons._1));
+				curConsonant = cons._1;
 			}
 		}
 	}

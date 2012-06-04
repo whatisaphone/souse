@@ -10,7 +10,7 @@ namespace MouseAhead
 		public const int AudioChannels = 1;
 		public const int AudioBufferSize = 4096;
 		public const int AudioBufferCount = 4;
-		public const double AudioSensitivity = 0.1;
+		public const double AudioSensitivity = 0.2;
 
 		public static AudioMaster audioMaster;
 
@@ -55,9 +55,9 @@ namespace MouseAhead
 				case Consonant.T:
 					return MouseButtons.Left;
 				case Consonant.K:
-					return MouseButtons.Right;
-				case Consonant.S:
 					return MouseButtons.Middle;
+				case Consonant.S:
+					return MouseButtons.Right;
 				default:
 					return MouseButtons.None;
 			}
