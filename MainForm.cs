@@ -15,8 +15,8 @@ namespace MouseAhead
 			notifyIcon.Text = "MouseAhead";
 			notifyIcon.Icon = App.audioMaster.Running ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
 			notifyIcon.ContextMenuStrip = mnuNotifyIcon;
-			notifyIcon.Click += NotifyIcon_Click;
-			notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+			notifyIcon.MouseClick += NotifyIcon_MouseClick;
+			notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
 
 			App.audioMaster.Started += audioMaster_Started;
 			App.audioMaster.Stopped += audioMaster_Stopped;
@@ -57,17 +57,23 @@ namespace MouseAhead
 				HideMe();
 		}
 
-		void NotifyIcon_Click(object sender, EventArgs e)
+		void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (App.audioMaster.Running)
-				App.audioMaster.Stop();
-			else
-				App.audioMaster.Start();
+			if (e.Button == MouseButtons.Left)
+			{
+				if (App.audioMaster.Running)
+					App.audioMaster.Stop();
+				else
+					App.audioMaster.Start();
+			}
 		}
 
-		void NotifyIcon_DoubleClick(object sender, EventArgs e)
+		void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			ShowMe();
+			if (e.Button == MouseButtons.Left)
+			{
+				ShowMe();
+			}
 		}
 
 		void mnuTrayStart_Click(object sender, EventArgs e)
