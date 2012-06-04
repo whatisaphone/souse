@@ -1,0 +1,12 @@
+MouseAhead
+==========
+
+An app that lets you click the mouse by making "clicking" sounds with your mouth.
+
+So far this is just a barebones app, with no UI, and with everything hard-coded. Maybe that will change one day, who knows.
+
+Sound  Mouse button
+-----  ------------
+T      Left
+K      Right
+S      Middle
