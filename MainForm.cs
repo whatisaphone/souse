@@ -15,6 +15,7 @@ namespace MouseAhead
 			notifyIcon.Text = "MouseAhead";
 			notifyIcon.Icon = App.audioMaster.Running ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
 			notifyIcon.ContextMenuStrip = mnuNotifyIcon;
+			notifyIcon.Click += NotifyIcon_Click;
 			notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
 
 			App.audioMaster.Started += audioMaster_Started;
@@ -54,6 +55,14 @@ namespace MouseAhead
 		{
 			if (WindowState == FormWindowState.Minimized)
 				HideMe();
+		}
+
+		void NotifyIcon_Click(object sender, EventArgs e)
+		{
+			if (App.audioMaster.Running)
+				App.audioMaster.Stop();
+			else
+				App.audioMaster.Start();
 		}
 
 		void NotifyIcon_DoubleClick(object sender, EventArgs e)
