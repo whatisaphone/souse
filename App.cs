@@ -39,31 +39,27 @@ namespace MouseAhead
 
 		static void ConsonantChanged(object sender, ConsonantChangedEventArgs e)
 		{
-			switch (e.NewConsonant)
+			MouseButtons btn = ConsonantToButton(e.OldConsonant);
+			if (btn != MouseButtons.None)
+				InputInjector.MouseEvent(btn, false);
+
+			btn = ConsonantToButton(e.NewConsonant);
+			if (btn != MouseButtons.None)
+				InputInjector.MouseEvent(btn, true);
+		}
+
+		static MouseButtons ConsonantToButton(Consonant consonant)
+		{
+			switch (consonant)
 			{
 				case Consonant.T:
-					InputInjector.MouseEvent(MouseButtons.Left, true);
-					break;
+					return MouseButtons.Left;
 				case Consonant.K:
-					InputInjector.MouseEvent(MouseButtons.Right, true);
-					break;
+					return MouseButtons.Right;
 				case Consonant.S:
-					InputInjector.MouseEvent(MouseButtons.Middle, true);
-					break;
-				case Consonant.None:
-					switch (e.OldConsonant)
-					{
-						case Consonant.T:
-							InputInjector.MouseEvent(MouseButtons.Left, false);
-							break;
-						case Consonant.K:
-							InputInjector.MouseEvent(MouseButtons.Right, false);
-							break;
-						case Consonant.S:
-							InputInjector.MouseEvent(MouseButtons.Middle, false);
-							break;
-					}
-					break;
+					return MouseButtons.Middle;
+				default:
+					return MouseButtons.None;
 			}
 		}
 	}
