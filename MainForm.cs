@@ -10,14 +10,28 @@ namespace MouseAhead
 		public MainForm()
 		{
 			InitializeComponent();
+
 			notifyIcon = new NotifyIcon();
 			notifyIcon.Text = "MouseAhead";
-			notifyIcon.Icon = this.Icon;
+			notifyIcon.Icon = App.audioMaster.Running ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
 			notifyIcon.ContextMenuStrip = mnuNotifyIcon;
 			notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+
+			App.audioMaster.Started += audioMaster_Started;
+			App.audioMaster.Stopped += audioMaster_Stopped;
 		}
 
-		private void mnuShow_Click(object sender, EventArgs e)
+		void audioMaster_Started(object sender, EventArgs e)
+		{
+			notifyIcon.Icon = Properties.Resources.StartedIcon;
+		}
+
+		void audioMaster_Stopped(object sender, EventArgs e)
+		{
+			notifyIcon.Icon = Properties.Resources.StoppedIcon;
+		}
+
+		private void mnuTrayShow_Click(object sender, EventArgs e)
 		{
 			ShowMe();
 		}
@@ -47,7 +61,7 @@ namespace MouseAhead
 			notifyIcon.Visible = true;
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e)
+		private void mnuTrayExit_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
@@ -55,6 +69,16 @@ namespace MouseAhead
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			notifyIcon.Visible = false;
+		}
+
+		private void mnuTrayStart_Click(object sender, EventArgs e)
+		{
+			App.audioMaster.Start();
+		}
+
+		private void mnuTrayStop_Click(object sender, EventArgs e)
+		{
+			App.audioMaster.Stop();
 		}
 	}
 }

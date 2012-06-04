@@ -30,32 +30,57 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.mnuNotifyIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuShow = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTrayStart = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTrayStop = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTraySep1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuTrayShow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTrayExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNotifyIcon.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mnuNotifyIcon
 			// 
 			this.mnuNotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuShow,
-            this.mnuExit});
+            this.mnuTrayStart,
+            this.mnuTrayStop,
+            this.mnuTraySep1,
+            this.mnuTrayShow,
+            this.mnuTrayExit});
 			this.mnuNotifyIcon.Name = "mnuNotifyIcon";
-			this.mnuNotifyIcon.Size = new System.Drawing.Size(118, 48);
+			this.mnuNotifyIcon.Size = new System.Drawing.Size(153, 120);
 			// 
-			// mnuShow
+			// mnuTrayStart
 			// 
-			this.mnuShow.Name = "mnuShow";
-			this.mnuShow.Size = new System.Drawing.Size(152, 22);
-			this.mnuShow.Text = "&Show";
-			this.mnuShow.Click += new System.EventHandler(this.mnuShow_Click);
+			this.mnuTrayStart.Name = "mnuTrayStart";
+			this.mnuTrayStart.Size = new System.Drawing.Size(152, 22);
+			this.mnuTrayStart.Text = "&Start";
+			this.mnuTrayStart.Click += new System.EventHandler(this.mnuTrayStart_Click);
 			// 
-			// mnuExit
+			// mnuTrayStop
 			// 
-			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(152, 22);
-			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+			this.mnuTrayStop.Name = "mnuTrayStop";
+			this.mnuTrayStop.Size = new System.Drawing.Size(152, 22);
+			this.mnuTrayStop.Text = "S&top";
+			this.mnuTrayStop.Click += new System.EventHandler(this.mnuTrayStop_Click);
+			// 
+			// mnuTraySep1
+			// 
+			this.mnuTraySep1.Name = "mnuTraySep1";
+			this.mnuTraySep1.Size = new System.Drawing.Size(149, 6);
+			// 
+			// mnuTrayShow
+			// 
+			this.mnuTrayShow.Name = "mnuTrayShow";
+			this.mnuTrayShow.Size = new System.Drawing.Size(152, 22);
+			this.mnuTrayShow.Text = "Sh&ow";
+			this.mnuTrayShow.Click += new System.EventHandler(this.mnuTrayShow_Click);
+			// 
+			// mnuTrayExit
+			// 
+			this.mnuTrayExit.Name = "mnuTrayExit";
+			this.mnuTrayExit.Size = new System.Drawing.Size(152, 22);
+			this.mnuTrayExit.Text = "E&xit";
+			this.mnuTrayExit.Click += new System.EventHandler(this.mnuTrayExit_Click);
 			// 
 			// MainForm
 			// 
@@ -63,7 +88,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(292, 273);
 			this.Name = "MainForm";
-			this.Text = "Form1";
+			this.Text = "MouseAhead";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
 			this.Resize += new System.EventHandler(this.MainForm_Resize);
 			this.mnuNotifyIcon.ResumeLayout(false);
@@ -74,8 +99,11 @@
 		#endregion
 
 		private System.Windows.Forms.ContextMenuStrip mnuNotifyIcon;
-		private System.Windows.Forms.ToolStripMenuItem mnuShow;
-		private System.Windows.Forms.ToolStripMenuItem mnuExit;
+		private System.Windows.Forms.ToolStripMenuItem mnuTrayShow;
+		private System.Windows.Forms.ToolStripMenuItem mnuTrayExit;
+		private System.Windows.Forms.ToolStripMenuItem mnuTrayStart;
+		private System.Windows.Forms.ToolStripMenuItem mnuTrayStop;
+		private System.Windows.Forms.ToolStripSeparator mnuTraySep1;
 	}
 }
 
