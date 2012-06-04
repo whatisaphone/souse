@@ -16,10 +16,12 @@ namespace MouseAhead
 
 	class AudioMaster : IDisposable
 	{
-		bool running;
+		public bool Running { get; private set; }
 		IAudioSource waveIn;
 		Consonant curConsonant;
 
+		public event EventHandler<EventArgs> Started;
+		public event EventHandler<EventArgs> Stopped;
 		public event EventHandler<ConsonantChangedEventArgs> ConsonantChanged;
 
 		public AudioMaster()
@@ -36,18 +38,22 @@ namespace MouseAhead
 
 		public void Start()
 		{
-			if (running)
+			if (Running)
 				return;
 			waveIn.Start();
-			running = true;
+			Running = true;
+			if (Started != null)
+				Started(this, EventArgs.Empty);
 		}
 
 		public void Stop()
 		{
-			if (!running)
+			if (!Running)
 				return;
 			waveIn.Stop();
-			running = false;
+			Running = false;
+			if (Stopped != null)
+				Stopped(this, EventArgs.Empty);
 		}
 
 		public void GotAudioData(object sender, AudioDataEventArgs e)
@@ -55,7 +61,8 @@ namespace MouseAhead
 			var cons = AudioAnalyzer.DetermineConsonant(e.Data);
 			if (cons._1 != curConsonant)
 			{
-				ConsonantChanged(this, new ConsonantChangedEventArgs(curConsonant, cons._1));
+				if (ConsonantChanged != null)
+					ConsonantChanged(this, new ConsonantChangedEventArgs(curConsonant, cons._1));
 				curConsonant = cons._1;
 			}
 		}

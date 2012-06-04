@@ -62,7 +62,8 @@ namespace MouseAhead
 			for (int i = 0; i < ints.Length; ++i)
 				flt[i] = ints[i] / 65535.0;
 
-			GotAudio(this, new AudioDataEventArgs(flt));
+			if (GotAudio != null)
+				GotAudio(this, new AudioDataEventArgs(flt));
 		}
 	}
 }
