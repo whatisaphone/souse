@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -66,24 +67,34 @@ namespace MouseAhead
 		static extern uint MapVirtualKey(uint uCode, uint uMapType);
 		[DllImport("user32")]
 		static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
-		
-		public static void KeyEvent(Keys keys, bool down)
+
+		private static INPUT KeyboardInput(Keys key, uint flags)
 		{
-			var input = new INPUT();
-			input.type = INPUT_KEYBOARD;
-			if ((keys & Keys.Modifiers) != 0)
+			return new INPUT
 			{
-				input.ki.wVk = (ushort)(((keys & Keys.Shift) != 0 ? Keys.ShiftKey : 0) |
-					((keys & Keys.Control) != 0 ? Keys.ControlKey : 0) |
-					((keys & Keys.Alt) != 0 ? Keys.Menu : 0));
+				type = INPUT_KEYBOARD,
+				ki = {wVk = (ushort)key, wScan = (ushort)MapVirtualKey((ushort)key, MAPVK_VK_TO_VSC), dwFlags = flags},
+			};
+		}
+
+		public static void KeyEvent(Keys key, bool down)
+		{
+			var inputs = new List<INPUT>();
+			var flags = down ? 0 : KEYEVENTF_KEYUP;
+			if ((key & Keys.Modifiers) != 0)
+			{
+				if ((key & Keys.Shift) != 0)
+					inputs.Add(KeyboardInput(Keys.ShiftKey, flags));
+				if ((key & Keys.Control) != 0)
+					inputs.Add(KeyboardInput(Keys.ControlKey, flags));
+				if ((key & Keys.Alt) != 0)
+					inputs.Add(KeyboardInput(Keys.Menu, flags));
 			}
 			else
 			{
-				input.ki.wVk = (ushort)keys;
+				inputs.Add(KeyboardInput(key, flags));
 			}
-			input.ki.wScan = (ushort)MapVirtualKey(input.ki.wVk, MAPVK_VK_TO_VSC);
-			input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
-			SendInput(1, new[] {input}, Marshal.SizeOf(input));
+			SendInput((uint)inputs.Count, inputs.ToArray(), Marshal.SizeOf(typeof(INPUT)));
 		}
 
 		public static void MouseEvent(MouseButtons button, bool down)
