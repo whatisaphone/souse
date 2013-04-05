@@ -24,6 +24,9 @@ namespace MouseAhead
 		[STAThread]
 		static void Main()
 		{
+			// in general, input devices should try to stay super responsive
+			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
