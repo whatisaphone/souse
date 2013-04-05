@@ -18,6 +18,9 @@ namespace MouseAhead
 
 		public static AudioMaster audioMaster;
 
+		private static MouseButtons lastButton;
+		private static Tuple<Keys, Keys> lastKeys;
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
@@ -50,26 +53,28 @@ namespace MouseAhead
 
 			var curKeyDown = InputState.WhichNonModKeyIsDown();
 
-			MouseButtons btn = ConsonantToButton(e.NewConsonant);
-			if (curKeyDown == 0 && btn != MouseButtons.None)
-				InputInjector.MouseEvent(btn, true);
+			// mouse
 
-			btn = ConsonantToButton(e.OldConsonant);
-			if (btn != MouseButtons.None)
-				InputInjector.MouseEvent(btn, false);
+			if (e.NewConsonant == Consonant.None && lastButton != MouseButtons.None)
+				InputInjector.MouseEvent(lastButton, false);
 
-			var keys = ConsonantToKeystroke(e.NewConsonant);
-			if (curKeyDown == 0 && keys._2 != Keys.None)
+			lastButton = curKeyDown == 0 ? ConsonantToButton(e.NewConsonant) : MouseButtons.None;
+			if (lastButton != MouseButtons.None)
+				InputInjector.MouseEvent(lastButton, true);
+
+			// keyboard
+
+			if (e.NewConsonant == Consonant.None && lastKeys._2 != Keys.None)
 			{
-				InputInjector.KeyEvent(keys._1, true);
-				InputInjector.KeyEvent(keys._2, true);
+				InputInjector.KeyEvent(lastKeys._2, false);
+				InputInjector.KeyEvent(lastKeys._1, false);
 			}
 
-			keys = ConsonantToKeystroke(e.OldConsonant);
-			if (keys._2 != Keys.None)
+			lastKeys = curKeyDown == 0 ? ConsonantToKeystroke(e.NewConsonant) : Tuple.Make(Keys.None, Keys.None);
+			if (lastKeys._2 != Keys.None)
 			{
-				InputInjector.KeyEvent(keys._2, false);
-				InputInjector.KeyEvent(keys._1, false);
+				InputInjector.KeyEvent(lastKeys._1, true);
+				InputInjector.KeyEvent(lastKeys._2, true);
 			}
 		}
 
