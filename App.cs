@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace MouseAhead
@@ -42,16 +43,31 @@ namespace MouseAhead
 
 		static void ConsonantChanged(object sender, ConsonantChangedEventArgs e)
 		{
-			if (InputState.WhichNonModKeyIsDown() != 0)
-				return;
+			Debug.Assert(e.OldConsonant == Consonant.None || e.NewConsonant == Consonant.None);
 
-			MouseButtons btn = ConsonantToButton(e.OldConsonant);
+			var curKeyDown = InputState.WhichNonModKeyIsDown();
+
+			MouseButtons btn = ConsonantToButton(e.NewConsonant);
+			if (curKeyDown == 0 && btn != MouseButtons.None)
+				InputInjector.MouseEvent(btn, true);
+
+			btn = ConsonantToButton(e.OldConsonant);
 			if (btn != MouseButtons.None)
 				InputInjector.MouseEvent(btn, false);
 
-			btn = ConsonantToButton(e.NewConsonant);
-			if (btn != MouseButtons.None)
-				InputInjector.MouseEvent(btn, true);
+			var keys = ConsonantToKeystroke(e.NewConsonant);
+			if (keys._2 != Keys.None)
+			{
+				InputInjector.KeyEvent(keys._1, true);
+				InputInjector.KeyEvent(keys._2, true);
+			}
+
+			keys = ConsonantToKeystroke(e.OldConsonant);
+			if (keys._2 != Keys.None)
+			{
+				InputInjector.KeyEvent(keys._2, false);
+				InputInjector.KeyEvent(keys._1, false);
+			}
 		}
 
 		static MouseButtons ConsonantToButton(Consonant consonant)
@@ -66,6 +82,31 @@ namespace MouseAhead
 					return MouseButtons.Right;
 				default:
 					return MouseButtons.None;
+			}
+		}
+
+		private static Tuple<Keys, Keys> ConsonantToKeystroke(Consonant consonant)
+		{
+			switch (consonant)
+			{
+				case Consonant.A:
+					return Tuple.Make(Keys.Control, Keys.F4);
+				case Consonant.As:
+					return Tuple.Make(Keys.Control | Keys.Shift, Keys.T);
+				case Consonant.B:
+					return Tuple.Make(Keys.Control, Keys.T);
+				case Consonant.C:
+					return Tuple.Make(Keys.Control | Keys.Shift, Keys.Tab);
+				case Consonant.D:
+					return Tuple.Make(Keys.Control, Keys.Tab);
+				case Consonant.E:
+					return Tuple.Make(Keys.None, Keys.PageDown);
+				case Consonant.G:
+					return Tuple.Make(Keys.None, Keys.PageUp);
+				case Consonant.Ahigh:
+					return Tuple.Make(Keys.Alt, Keys.F4);
+				default:
+					return Tuple.Make(Keys.None, Keys.None);
 			}
 		}
 	}

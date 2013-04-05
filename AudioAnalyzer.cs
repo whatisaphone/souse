@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MouseAhead
 {
 	enum Consonant
 	{
-		None, K, S, T
+		None, K, S, T, A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs, Ahigh,
 	}
 
 	struct FreqTrigger
@@ -45,9 +46,14 @@ namespace MouseAhead
 		static AudioAnalyzer()
 		{
 			freqTriggers = new List<FreqTrigger>();
-			freqTriggers.Add(new FreqTrigger( 900.0, 1500.0, 0.5, Consonant.K));
+			freqTriggers.Add(new FreqTrigger( 900.0, 1500.0, 1.0, Consonant.K));
 			freqTriggers.Add(new FreqTrigger(1500.0, 3000.0, 1.5, Consonant.T));
 			freqTriggers.Add(new FreqTrigger(3800.0, 9000.0, 1.0, Consonant.S));
+			for (var semi = 0; semi <= 12; ++semi)
+			{
+				var tone = 880 * Math.Pow(2, semi / 12.0);
+				freqTriggers.Add(new FreqTrigger(tone * 0.96, tone * 1.04, 0.25, Consonant.A + semi));
+			}
 		}
 
 		public static AudioAnalysisResult AnalyzeFrame(double[] data)
