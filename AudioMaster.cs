@@ -58,12 +58,13 @@ namespace MouseAhead
 
 		public void GotAudioData(object sender, AudioDataEventArgs e)
 		{
-			var cons = AudioAnalyzer.DetermineConsonant(e.Data);
-			if (cons._1 != curConsonant)
+			var info = AudioAnalyzer.AnalyzeFrame(e.Data);
+			if (info.Consonant != curConsonant && info.Consonant == Consonant.None || curConsonant == Consonant.None)
 			{
+				//Console.WriteLine(info.Consonant.ToString() + " - " + info.LoudestFreq.ToString());
 				if (ConsonantChanged != null)
-					ConsonantChanged(this, new ConsonantChangedEventArgs(curConsonant, cons._1));
-				curConsonant = cons._1;
+					ConsonantChanged(this, new ConsonantChangedEventArgs(curConsonant, info.Consonant));
+				curConsonant = info.Consonant;
 			}
 		}
 	}

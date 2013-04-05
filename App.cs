@@ -10,7 +10,10 @@ namespace MouseAhead
 		public const int AudioChannels = 1;
 		public const int AudioBufferSize = 4096;
 		public const int AudioBufferCount = 4;
-		public const double AudioSensitivity = 0.2;
+		public const double AudioHighPassFreq = 1000;
+		public const double AudioLowPassFreq = 20000;
+		public const double AudioTotalSensitivity = 0.25;
+		public const double AudioBucketSensitivity = 0.15;
 
 		public static AudioMaster audioMaster;
 
@@ -39,6 +42,9 @@ namespace MouseAhead
 
 		static void ConsonantChanged(object sender, ConsonantChangedEventArgs e)
 		{
+			if (InputState.WhichNonModKeyIsDown() != 0)
+				return;
+
 			MouseButtons btn = ConsonantToButton(e.OldConsonant);
 			if (btn != MouseButtons.None)
 				InputInjector.MouseEvent(btn, false);

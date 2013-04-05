@@ -23,6 +23,21 @@ namespace MouseAhead
 		}
 	}
 
+	struct AudioAnalysisResult
+	{
+		public Consonant Consonant { get; private set; }
+		public double AverageVolume { get; private set; }
+		public double LoudestFreq { get; private set; }
+
+		public AudioAnalysisResult(Consonant consonant, double averageVolume, double loudestFreq)
+			: this()
+		{
+			Consonant = consonant;
+			AverageVolume = averageVolume;
+			LoudestFreq = loudestFreq;
+		}
+	}
+
 	static class AudioAnalyzer
 	{
 		static List<FreqTrigger> freqTriggers;
@@ -30,37 +45,47 @@ namespace MouseAhead
 		static AudioAnalyzer()
 		{
 			freqTriggers = new List<FreqTrigger>();
-			freqTriggers.Add(new FreqTrigger(1000.0, 2000.0, 0.3, Consonant.K));
-			freqTriggers.Add(new FreqTrigger(2500.0, 4000.0, 1.0, Consonant.T));
-			freqTriggers.Add(new FreqTrigger(6000.0, 9000.0, 1.0, Consonant.S));
+			freqTriggers.Add(new FreqTrigger( 900.0, 1500.0, 0.5, Consonant.K));
+			freqTriggers.Add(new FreqTrigger(1500.0, 3000.0, 1.5, Consonant.T));
+			freqTriggers.Add(new FreqTrigger(3800.0, 9000.0, 1.0, Consonant.S));
 		}
 
-		public static Tuple<Consonant, double> DetermineConsonant(double[] data)
+		public static AudioAnalysisResult AnalyzeFrame(double[] data)
 		{
 			var buckets = SoundAnalysis.FftAlgorithm.Calculate(data);
 
-			Consonant cons = Consonant.None;
+			double totalAvg = AverageRange(buckets, App.AudioHighPassFreq, App.AudioLowPassFreq);
+			double peakFreq = GetPeakFreq(buckets, App.AudioHighPassFreq, App.AudioLowPassFreq);
+			var cons = totalAvg < App.AudioTotalSensitivity ? Consonant.None : DetermineConsonant(buckets);
+
+			return new AudioAnalysisResult(cons, totalAvg, peakFreq);
+		}
+
+		private static Consonant DetermineConsonant(double[] buckets)
+		{
+			Consonant ret = Consonant.None;
 			double maxAvg = 0;
 			foreach (var trigger in freqTriggers)
 			{
 				var avg = AverageRange(buckets, trigger.MinFreq, trigger.MaxFreq) * trigger.Strength;
-				if (avg > maxAvg && avg > App.AudioSensitivity)
+				if (avg > maxAvg && avg > App.AudioBucketSensitivity)
 				{
 					maxAvg = avg;
-					cons = trigger.Consonant;
+					ret = trigger.Consonant;
 				}
 			}
 
-			double peakFreq = GetPeakFreq(buckets, 500, 20000);
-			if (peakFreq < 1000 && cons != Consonant.None)
-				cons = Consonant.None;
-
-			return Tuple.Make(cons, peakFreq);
+			return ret;
 		}
 
 		public static int FreqToIndex(double freq, int length)
 		{
-			return (int)(freq / App.AudioRate * length);
+			var ret = (int)(freq / App.AudioRate * length);
+			if (ret < 0)
+				return 0;
+			if (ret >= length)
+				return length - 1;
+			return ret;
 		}
 
 		public static double IndexToFreq(int index, int length)
@@ -76,7 +101,7 @@ namespace MouseAhead
 			double sum = 0;
 			for (var i = startIndex; i <= stopIndex; ++i)
 				sum += data[i];
-			return sum / (stopIndex - startIndex);
+			return sum / (stopIndex - startIndex + 1);
 		}
 
 		public static double GetPeakFreq(double[] data, double startFreq, double stopFreq)

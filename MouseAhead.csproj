@@ -47,6 +47,7 @@
     <Compile Include="ComplexNumber.cs" />
     <Compile Include="FftAlgorithm.cs" />
     <Compile Include="InputInjector.cs" />
+    <Compile Include="InputState.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

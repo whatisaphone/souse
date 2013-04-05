@@ -95,5 +95,10 @@ namespace MouseAhead
 		{
 			Close();
 		}
+
+		private void mnuTrayKeyCheck_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show(InputState.WhichNonModKeyIsDown().ToString());
+		}
 	}
 }

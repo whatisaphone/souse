@@ -35,6 +35,7 @@
 			this.mnuTraySep1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuTrayShow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTrayExit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTrayKeyCheck = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNotifyIcon.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,10 +45,11 @@
             this.mnuTrayStart,
             this.mnuTrayStop,
             this.mnuTraySep1,
+            this.mnuTrayKeyCheck,
             this.mnuTrayShow,
             this.mnuTrayExit});
 			this.mnuNotifyIcon.Name = "mnuNotifyIcon";
-			this.mnuNotifyIcon.Size = new System.Drawing.Size(153, 120);
+			this.mnuNotifyIcon.Size = new System.Drawing.Size(153, 142);
 			// 
 			// mnuTrayStart
 			// 
@@ -82,6 +84,13 @@
 			this.mnuTrayExit.Text = "E&xit";
 			this.mnuTrayExit.Click += new System.EventHandler(this.mnuTrayExit_Click);
 			// 
+			// mnuTrayKeyCheck
+			// 
+			this.mnuTrayKeyCheck.Name = "mnuTrayKeyCheck";
+			this.mnuTrayKeyCheck.Size = new System.Drawing.Size(152, 22);
+			this.mnuTrayKeyCheck.Text = "&Key check";
+			this.mnuTrayKeyCheck.Click += new System.EventHandler(this.mnuTrayKeyCheck_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -104,6 +113,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuTrayStart;
 		private System.Windows.Forms.ToolStripMenuItem mnuTrayStop;
 		private System.Windows.Forms.ToolStripSeparator mnuTraySep1;
+		private System.Windows.Forms.ToolStripMenuItem mnuTrayKeyCheck;
 	}
 }
 
