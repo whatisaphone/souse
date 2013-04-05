@@ -43,7 +43,6 @@ namespace MouseAhead
 						i != VK_NUMLOCK && i != VK_ADD &&
 						i != VK_LMENU && i != VK_RMENU)
 				{
-					System.Diagnostics.Debug.WriteLine(i.ToString() + " - " + GetAsyncKeyState(i).ToString());
 					if (GetAsyncKeyState(i) != 0)
 						return i;
 				}
