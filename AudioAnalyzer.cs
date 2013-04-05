@@ -5,7 +5,7 @@ namespace MouseAhead
 {
 	enum Consonant
 	{
-		None, K, S, T, A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs, Ahigh,
+		None, K, S, T, A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs, HighA, HighAs, HighB,
 	}
 
 	struct FreqTrigger
@@ -46,13 +46,14 @@ namespace MouseAhead
 		static AudioAnalyzer()
 		{
 			freqTriggers = new List<FreqTrigger>();
-			freqTriggers.Add(new FreqTrigger( 900.0, 1500.0, 1.0, Consonant.K));
+			freqTriggers.Add(new FreqTrigger( 900.0, 1500.0, 0.9, Consonant.K));
 			freqTriggers.Add(new FreqTrigger(1500.0, 3000.0, 1.5, Consonant.T));
 			freqTriggers.Add(new FreqTrigger(3800.0, 9000.0, 1.0, Consonant.S));
-			for (var semi = 0; semi <= 12; ++semi)
+			for (var semi = 0; semi <= 14; ++semi)
 			{
-				var tone = 880 * Math.Pow(2, semi / 12.0);
-				freqTriggers.Add(new FreqTrigger(tone * 0.96, tone * 1.04, 0.25, Consonant.A + semi));
+				var tone = App.A880 * Math.Pow(2, semi / 12.0);
+				var strength = Math.Max(0.25, 0.3333 / Math.Pow(2, semi / 12.0));
+				freqTriggers.Add(new FreqTrigger(tone * 0.95, tone * 1.05, strength, Consonant.A + semi));
 			}
 		}
 

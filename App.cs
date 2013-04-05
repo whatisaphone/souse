@@ -9,12 +9,13 @@ namespace MouseAhead
 		public const int AudioRate = 44100;
 		public const int AudioBits = 16;
 		public const int AudioChannels = 1;
-		public const int AudioBufferSize = 4096;
+		public const int AudioBufferSize = 6144;
 		public const int AudioBufferCount = 4;
 		public const double AudioHighPassFreq = 1000;
 		public const double AudioLowPassFreq = 20000;
-		public const double AudioTotalSensitivity = 0.25;
+		public const double AudioTotalSensitivity = 0.05;
 		public const double AudioBucketSensitivity = 0.15;
+		public const double A880 = 880.0;  // frequency your mic hears for 880Hz input
 
 		public static AudioMaster audioMaster;
 
@@ -97,21 +98,23 @@ namespace MouseAhead
 		{
 			switch (consonant)
 			{
-				case Consonant.A:
-					return Tuple.Make(Keys.Control, Keys.F4);
-				case Consonant.As:
-					return Tuple.Make(Keys.Control | Keys.Shift, Keys.T);
-				case Consonant.B:
-					return Tuple.Make(Keys.Control, Keys.T);
 				case Consonant.C:
 					return Tuple.Make(Keys.None, Keys.PageDown);
+				case Consonant.Cs:
+					return Tuple.Make(Keys.Control | Keys.Shift, Keys.Tab);
 				case Consonant.D:
 					return Tuple.Make(Keys.None, Keys.PageUp);
-				case Consonant.E:
-					return Tuple.Make(Keys.Control | Keys.Shift, Keys.Tab);
-				case Consonant.G:
+				case Consonant.Ds:
 					return Tuple.Make(Keys.Control, Keys.Tab);
-				case Consonant.Ahigh:
+				case Consonant.E:
+					return Tuple.Make(Keys.Control, Keys.Subtract);
+				case Consonant.Fs:
+					return Tuple.Make(Keys.Control, Keys.Add);
+				case Consonant.G:
+					return Tuple.Make(Keys.Control, Keys.F4);
+				case Consonant.HighA:
+					return Tuple.Make(Keys.Control | Keys.Shift, Keys.T);
+				case Consonant.HighB:
 					return Tuple.Make(Keys.Alt, Keys.F4);
 				default:
 					return Tuple.Make(Keys.None, Keys.None);
