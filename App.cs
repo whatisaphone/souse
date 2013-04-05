@@ -59,7 +59,7 @@ namespace MouseAhead
 				InputInjector.MouseEvent(btn, false);
 
 			var keys = ConsonantToKeystroke(e.NewConsonant);
-			if (keys._2 != Keys.None)
+			if (curKeyDown == 0 && keys._2 != Keys.None)
 			{
 				InputInjector.KeyEvent(keys._1, true);
 				InputInjector.KeyEvent(keys._2, true);
@@ -99,13 +99,13 @@ namespace MouseAhead
 				case Consonant.B:
 					return Tuple.Make(Keys.Control, Keys.T);
 				case Consonant.C:
-					return Tuple.Make(Keys.Control | Keys.Shift, Keys.Tab);
-				case Consonant.D:
-					return Tuple.Make(Keys.Control, Keys.Tab);
-				case Consonant.E:
 					return Tuple.Make(Keys.None, Keys.PageDown);
-				case Consonant.G:
+				case Consonant.D:
 					return Tuple.Make(Keys.None, Keys.PageUp);
+				case Consonant.E:
+					return Tuple.Make(Keys.Control | Keys.Shift, Keys.Tab);
+				case Consonant.G:
+					return Tuple.Make(Keys.Control, Keys.Tab);
 				case Consonant.Ahigh:
 					return Tuple.Make(Keys.Alt, Keys.F4);
 				default:
