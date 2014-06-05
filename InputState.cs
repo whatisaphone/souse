@@ -41,7 +41,7 @@ namespace MouseAhead
 				if (i != VK_SHIFT && i != VK_CONTROL && i != VK_ALT &&
 						i != VK_LSHIFT && i != VK_RSHIFT && i != VK_LCONTROL && i != VK_RCONTROL &&
 						i != VK_NUMLOCK && i != VK_ADD &&
-						i != VK_LMENU && i != VK_RMENU)
+						i != VK_LMENU && i != VK_RMENU && i != VK_F6)
 				{
 					if (GetAsyncKeyState(i) != 0)
 						return i;

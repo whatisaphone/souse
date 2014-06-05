@@ -13,9 +13,9 @@ namespace MouseAhead
 		public const int AudioBufferCount = 4;
 		public const double AudioHighPassFreq = 1000;
 		public const double AudioLowPassFreq = 20000;
-		public const double AudioTotalSensitivity = 0.05;
-		public const double AudioBucketSensitivity = 0.15;
-		public const double A880 = 880.0;  // frequency your mic hears for 880Hz input
+		public const double AudioTotalSensitivity = 0.02;
+		public const double AudioBucketSensitivity = 0.02;
+		public const double A880 = 875.0;  // frequency your mic hears for 880Hz input
 
 		public static AudioMaster audioMaster;
 
