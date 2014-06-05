@@ -13,7 +13,7 @@ namespace MouseAhead
 
 			notifyIcon = new NotifyIcon();
 			notifyIcon.Text = "MouseAhead";
-			notifyIcon.Icon = App.audioMaster.Running ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
+			notifyIcon.Icon = App.audioMaster.Enabled ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
 			notifyIcon.ContextMenuStrip = mnuNotifyIcon;
 			notifyIcon.MouseClick += NotifyIcon_MouseClick;
 			notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
@@ -61,10 +61,10 @@ namespace MouseAhead
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				if (App.audioMaster.Running)
-					App.audioMaster.Stop();
-				else
-					App.audioMaster.Start();
+                if (App.audioMaster.Enabled)
+                    App.audioMaster.Enabled = false;
+                else
+                    App.audioMaster.Enabled = true;
 			}
 		}
 
@@ -78,12 +78,12 @@ namespace MouseAhead
 
 		void mnuTrayStart_Click(object sender, EventArgs e)
 		{
-			App.audioMaster.Start();
+            App.audioMaster.Enabled = true;
 		}
 
 		void mnuTrayStop_Click(object sender, EventArgs e)
 		{
-			App.audioMaster.Stop();
+            App.audioMaster.Enabled = false;
 		}
 
 		void mnuTrayShow_Click(object sender, EventArgs e)
