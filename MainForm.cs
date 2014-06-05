@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MouseAhead
@@ -13,13 +14,12 @@ namespace MouseAhead
 
 			notifyIcon = new NotifyIcon();
 			notifyIcon.Text = "MouseAhead";
-			notifyIcon.Icon = App.audioMaster.Enabled ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
+			notifyIcon.Icon = GetNotifyIconIcon();
 			notifyIcon.ContextMenuStrip = mnuNotifyIcon;
 			notifyIcon.MouseClick += NotifyIcon_MouseClick;
 			notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
 
-			App.audioMaster.Started += audioMaster_Started;
-			App.audioMaster.Stopped += audioMaster_Stopped;
+			App.audioMaster.EnabledChanged += audioMaster_EnabledChanged;
 		}
 
 		void ShowMe()
@@ -36,15 +36,15 @@ namespace MouseAhead
 			notifyIcon.Visible = true;
 		}
 
-		void audioMaster_Started(object sender, EventArgs e)
+        void audioMaster_EnabledChanged(object sender, EventArgs e)
 		{
-			notifyIcon.Icon = Properties.Resources.StartedIcon;
+			notifyIcon.Icon = GetNotifyIconIcon();
 		}
 
-		void audioMaster_Stopped(object sender, EventArgs e)
-		{
-			notifyIcon.Icon = Properties.Resources.StoppedIcon;
-		}
+        Icon GetNotifyIconIcon()
+        {
+            return App.audioMaster.Enabled ? Properties.Resources.StartedIcon : Properties.Resources.StoppedIcon;
+        }
 
 		void MainForm_FormClosed(object sender, FormClosedEventArgs e)
 		{

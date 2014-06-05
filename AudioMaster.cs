@@ -17,17 +17,16 @@ namespace MouseAhead
 	class AudioMaster : IDisposable
     {
         public bool Running { get; private set; }
-        public bool Enabled { get; set; }
+        private bool enabled;
 		IAudioSource waveIn;
 		Consonant curConsonant;
 
-		public event EventHandler<EventArgs> Started;
-		public event EventHandler<EventArgs> Stopped;
+        public event EventHandler<EventArgs> EnabledChanged;
 		public event EventHandler<ConsonantChangedEventArgs> ConsonantChanged;
 
 		public AudioMaster()
 		{
-            this.Enabled = true;
+            this.enabled = true;
 			waveIn = new WaveInAudioSource();
 			waveIn.GotAudio += GotAudioData;
 		}
@@ -44,8 +43,9 @@ namespace MouseAhead
 				return;
 			waveIn.Start();
 			Running = true;
-			if (Started != null)
-				Started(this, EventArgs.Empty);
+            enabled = true;
+			if (EnabledChanged != null)
+				EnabledChanged(this, EventArgs.Empty);
 		}
 
 		public void Stop()
@@ -54,9 +54,22 @@ namespace MouseAhead
 				return;
 			waveIn.Stop();
 			Running = false;
-			if (Stopped != null)
-				Stopped(this, EventArgs.Empty);
+			if (EnabledChanged != null)
+				EnabledChanged(this, EventArgs.Empty);
 		}
+
+        public bool Enabled
+        {
+            get { return enabled; }
+            set
+            {
+                if (value && !Running)
+                    Start();
+                enabled = value;
+			    if (EnabledChanged != null)
+				    EnabledChanged(this, EventArgs.Empty);
+            }
+        }
 
 		public void GotAudioData(object sender, AudioDataEventArgs e)
 		{
