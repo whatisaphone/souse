@@ -21,6 +21,7 @@ namespace MouseAhead
 
 		private static MouseButtons lastButton;
 		private static Tuple<Keys, Keys> lastKeys;
+        private static RPCServer rpcServer;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -38,6 +39,9 @@ namespace MouseAhead
 			audioMaster.ConsonantChanged += ConsonantChanged;
 			audioMaster.Start();
 
+            rpcServer = new RPCServer();
+            rpcServer.Start();
+
 			try
 			{
 				Application.Run(new MainForm());
@@ -45,6 +49,7 @@ namespace MouseAhead
 			finally
 			{
 				audioMaster.Dispose();
+                rpcServer.Stop();
 			}
 		}
 

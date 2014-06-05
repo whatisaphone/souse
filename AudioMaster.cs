@@ -15,8 +15,9 @@ namespace MouseAhead
 	}
 
 	class AudioMaster : IDisposable
-	{
-		public bool Running { get; private set; }
+    {
+        public bool Running { get; private set; }
+        public bool Enabled { get; set; }
 		IAudioSource waveIn;
 		Consonant curConsonant;
 
@@ -26,6 +27,7 @@ namespace MouseAhead
 
 		public AudioMaster()
 		{
+            this.Enabled = true;
 			waveIn = new WaveInAudioSource();
 			waveIn.GotAudio += GotAudioData;
 		}
@@ -58,6 +60,9 @@ namespace MouseAhead
 
 		public void GotAudioData(object sender, AudioDataEventArgs e)
 		{
+            if (!this.Enabled)
+                return;
+
 			var info = AudioAnalyzer.AnalyzeFrame(e.Data);
 			if (info.Consonant != curConsonant && info.Consonant == Consonant.None || curConsonant == Consonant.None)
 			{
