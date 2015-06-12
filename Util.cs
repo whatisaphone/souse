@@ -1,4 +1,4 @@
-﻿namespace MouseAhead
+﻿namespace Souse
 {
 	static class Tuple
 	{

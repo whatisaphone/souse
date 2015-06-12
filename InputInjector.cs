@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace MouseAhead
+namespace Souse
 {
 	static class InputInjector
 	{

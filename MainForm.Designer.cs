@@ -1,4 +1,4 @@
-﻿namespace MouseAhead
+﻿namespace Souse
 {
 	partial class MainForm
 	{
@@ -97,7 +97,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(292, 273);
 			this.Name = "MainForm";
-			this.Text = "MouseAhead";
+			this.Text = "Souse";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
 			this.Resize += new System.EventHandler(this.MainForm_Resize);
 			this.mnuNotifyIcon.ResumeLayout(false);

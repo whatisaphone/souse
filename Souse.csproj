@@ -8,8 +8,8 @@
     <ProjectGuid>{F2CC7DCE-7090-44F7-B2B1-07F1A4926E7E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MouseAhead</RootNamespace>
-    <AssemblyName>MouseAhead</AssemblyName>
+    <RootNamespace>Souse</RootNamespace>
+    <AssemblyName>Souse</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
