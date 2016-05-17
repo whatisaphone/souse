@@ -45,6 +45,7 @@
     <Compile Include="AudioSource.cs" />
     <Compile Include="AudioMaster.cs" />
     <Compile Include="ComplexNumber.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="FftAlgorithm.cs" />
     <Compile Include="InputInjector.cs" />
     <Compile Include="InputState.cs" />

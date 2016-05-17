@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Souse
 {
-	enum Consonant
+    internal enum Consonant
 	{
 		None, K, S, T, A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs, HighA, HighAs, HighB,
 	}
 
-	struct FreqTrigger
+    internal struct FreqTrigger
 	{
 		public double MinFreq { get; private set; }
 		public double MaxFreq { get; private set; }
@@ -24,7 +24,7 @@ namespace Souse
 		}
 	}
 
-	struct AudioAnalysisResult
+    internal struct AudioAnalysisResult
 	{
 		public Consonant Consonant { get; private set; }
 		public double AverageVolume { get; private set; }
@@ -39,9 +39,9 @@ namespace Souse
 		}
 	}
 
-	static class AudioAnalyzer
+    internal static class AudioAnalyzer
 	{
-		static List<FreqTrigger> freqTriggers;
+        private static List<FreqTrigger> freqTriggers;
 
 		static AudioAnalyzer()
 		{
@@ -51,7 +51,7 @@ namespace Souse
 			freqTriggers.Add(new FreqTrigger(3800.0, 9000.0, 1.0, Consonant.S));
 			for (var semi = 0; semi <= 14; ++semi)
 			{
-				var tone = App.A880 * Math.Pow(2, semi / 12.0);
+				var tone = App.config.A440 * 2 * Math.Pow(2, semi / 12.0);
 				var strength = Math.Max(0.25, 0.3333 / Math.Pow(2, semi / 12.0));
 				freqTriggers.Add(new FreqTrigger(tone * 0.95, tone * 1.05, strength, Consonant.A + semi));
 			}
@@ -61,9 +61,9 @@ namespace Souse
 		{
 			var buckets = SoundAnalysis.FftAlgorithm.Calculate(data);
 
-			double totalAvg = AverageRange(buckets, App.AudioHighPassFreq, App.AudioLowPassFreq);
-			double peakFreq = GetPeakFreq(buckets, App.AudioHighPassFreq, App.AudioLowPassFreq);
-			var cons = totalAvg < App.AudioTotalSensitivity ? Consonant.None : DetermineConsonant(buckets);
+            double totalAvg = AverageRange(buckets, App.config.AudioHighPassFreq, App.config.AudioLowPassFreq);
+            double peakFreq = GetPeakFreq(buckets, App.config.AudioHighPassFreq, App.config.AudioLowPassFreq);
+            var cons = totalAvg < App.config.AudioTotalSensitivity ? Consonant.None : DetermineConsonant(buckets);
 
 			return new AudioAnalysisResult(cons, totalAvg, peakFreq);
 		}
@@ -75,7 +75,7 @@ namespace Souse
 			foreach (var trigger in freqTriggers)
 			{
 				var avg = AverageRange(buckets, trigger.MinFreq, trigger.MaxFreq) * trigger.Strength;
-				if (avg > maxAvg && avg > App.AudioBucketSensitivity)
+                if (avg > maxAvg && avg > App.config.AudioBucketSensitivity)
 				{
 					maxAvg = avg;
 					ret = trigger.Consonant;
@@ -87,7 +87,7 @@ namespace Souse
 
 		public static int FreqToIndex(double freq, int length)
 		{
-			var ret = (int)(freq / App.AudioRate * length);
+            var ret = (int)(freq / App.config.AudioRate * length);
 			if (ret < 0)
 				return 0;
 			if (ret >= length)
@@ -97,7 +97,7 @@ namespace Souse
 
 		public static double IndexToFreq(int index, int length)
 		{
-			return index * App.AudioRate / length;
+            return index * App.config.AudioRate / length;
 		}
 
 		public static double AverageRange(double[] data, double startFreq, double stopFreq)

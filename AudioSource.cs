@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using WaveLib;
 
 namespace Souse
 {
-	class AudioDataEventArgs : EventArgs
+    internal class AudioDataEventArgs : EventArgs
 	{
 		public double[] Data { get; private set; }
 
@@ -15,17 +14,18 @@ namespace Souse
 		}
 	}
 
-	interface IAudioSource : IDisposable
+    internal interface IAudioSource : IDisposable
 	{
 		event EventHandler<AudioDataEventArgs> GotAudio;
 
 		void Start();
+
 		void Stop();
 	}
 
-	class WaveInAudioSource : IAudioSource, IDisposable
+    internal class WaveInAudioSource : IAudioSource, IDisposable
 	{
-		WaveInRecorder waveIn;
+        private WaveInRecorder waveIn;
 
 		public event EventHandler<AudioDataEventArgs> GotAudio;
 
@@ -38,9 +38,9 @@ namespace Souse
 		{
 			if (waveIn != null)
 				throw new InvalidOperationException();
-			var waveFmt = new WaveFormat(App.AudioRate, App.AudioBits, App.AudioChannels);
+            var waveFmt = new WaveFormat(App.config.AudioRate, App.config.AudioBits, App.config.AudioChannels);
 			// device -1 == wave mapper
-			waveIn = new WaveInRecorder(-1, waveFmt, App.AudioBufferSize, App.AudioBufferCount, GotAudioData);
+            waveIn = new WaveInRecorder(-1, waveFmt, App.config.AudioBufferSize, App.config.AudioBufferCount, GotAudioData);
 		}
 
 		public void Stop()
@@ -51,9 +51,9 @@ namespace Souse
 			waveIn = null;
 		}
 
-		void GotAudioData(IntPtr data, int size)
+        private void GotAudioData(IntPtr data, int size)
 		{
-			System.Diagnostics.Debug.Assert(App.AudioBits == 16);  // hardcoded for short[] and 65535.0
+            System.Diagnostics.Debug.Assert(App.config.AudioBits == 16);  // hardcoded for short[] and 65535.0
 
 			short[] ints = new short[size / 2];
 			Marshal.Copy(data, ints, 0, ints.Length);

@@ -4,19 +4,9 @@ using System.Windows.Forms;
 
 namespace Souse
 {
-	static class App
+    internal static class App
 	{
-		public const int AudioRate = 44100;
-		public const int AudioBits = 16;
-		public const int AudioChannels = 1;
-		public const int AudioBufferSize = 6144;
-		public const int AudioBufferCount = 4;
-		public const double AudioHighPassFreq = 1000;
-		public const double AudioLowPassFreq = 20000;
-		public const double AudioTotalSensitivity = 0.02;
-		public const double AudioBucketSensitivity = 0.02;
-		public const double A880 = 875.0;  // frequency your mic hears for 880Hz input
-
+        public static Config config = new Config();
 		public static AudioMaster audioMaster;
 
 		private static MouseButtons lastButton;
@@ -27,7 +17,7 @@ namespace Souse
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+        private static void Main()
 		{
 			// in general, input devices should try to stay super responsive
 			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
@@ -53,7 +43,7 @@ namespace Souse
 			}
 		}
 
-		static void ConsonantChanged(object sender, ConsonantChangedEventArgs e)
+        private static void ConsonantChanged(object sender, ConsonantChangedEventArgs e)
 		{
 			Debug.Assert(e.OldConsonant == Consonant.None || e.NewConsonant == Consonant.None);
 
@@ -84,7 +74,7 @@ namespace Souse
 			}
 		}
 
-		static MouseButtons ConsonantToButton(Consonant consonant)
+        private static MouseButtons ConsonantToButton(Consonant consonant)
 		{
 			switch (consonant)
 			{

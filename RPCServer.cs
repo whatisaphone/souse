@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Net;
 using System.Text;
 using System.Threading;
-using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Souse
 {
-    class RPCServer
+    internal class RPCServer
     {
-        Thread thread;
-        HttpListener listener;
+        private Thread thread;
+        private HttpListener listener;
 
         public void Start()
         {
             if (thread != null)
                 return;
             listener = new HttpListener();
-            listener.Prefixes.Add("http://127.0.0.1:50253/");
+            listener.Prefixes.Add(App.config.RPCBindAddress);
             thread = new Thread(ThreadEntry);
             thread.Start();
         }
