@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Souse
@@ -38,10 +39,23 @@ namespace Souse
 			}
 			finally
 			{
-				audioMaster.Dispose();
+                SetKillTimeout();
                 rpcServer.Stop();
+				audioMaster.Dispose();
 			}
 		}
+
+        private static void SetKillTimeout() {
+            // The audio code which I found somewhere on the internet has a threading
+            // bug that I don't feel like debugging which causes it to deadlock on
+            // dispose on newer windows versions. Here's the workaround
+            var thread = new Thread(() => {
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+                Process.GetCurrentProcess().Kill();
+            });
+            thread.IsBackground = true;
+            thread.Start();
+        }
 
         private static void ConsonantChanged(object sender, ConsonantChangedEventArgs e)
 		{
