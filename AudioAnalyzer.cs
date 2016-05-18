@@ -51,7 +51,7 @@ namespace Souse
 			freqTriggers.Add(new FreqTrigger(3800.0, 9000.0, 1.0, Consonant.S));
 			for (var semi = 0; semi <= 14; ++semi)
 			{
-				var tone = App.config.A440 * 2 * Math.Pow(2, semi / 12.0);
+				var tone = App.config.AnalysisA440 * 2 * Math.Pow(2, semi / 12.0);
 				var strength = Math.Max(0.25, 0.3333 / Math.Pow(2, semi / 12.0));
 				freqTriggers.Add(new FreqTrigger(tone * 0.95, tone * 1.05, strength, Consonant.A + semi));
 			}
@@ -61,9 +61,9 @@ namespace Souse
 		{
 			var buckets = SoundAnalysis.FftAlgorithm.Calculate(data);
 
-            double totalAvg = AverageRange(buckets, App.config.AudioHighPassFreq, App.config.AudioLowPassFreq);
-            double peakFreq = GetPeakFreq(buckets, App.config.AudioHighPassFreq, App.config.AudioLowPassFreq);
-            var cons = totalAvg < App.config.AudioTotalSensitivity ? Consonant.None : DetermineConsonant(buckets);
+            double totalAvg = AverageRange(buckets, App.config.AnalysisHighPassFreq, App.config.AnalysisLowPassFreq);
+            double peakFreq = GetPeakFreq(buckets, App.config.AnalysisHighPassFreq, App.config.AnalysisLowPassFreq);
+            var cons = totalAvg < App.config.AnalysisTotalSensitivity ? Consonant.None : DetermineConsonant(buckets);
 
 			return new AudioAnalysisResult(cons, totalAvg, peakFreq);
 		}
@@ -75,7 +75,7 @@ namespace Souse
 			foreach (var trigger in freqTriggers)
 			{
 				var avg = AverageRange(buckets, trigger.MinFreq, trigger.MaxFreq) * trigger.Strength;
-                if (avg > maxAvg && avg > App.config.AudioBucketSensitivity)
+                if (avg > maxAvg && avg > App.config.AnalysisBucketSensitivity)
 				{
 					maxAvg = avg;
 					ret = trigger.Consonant;

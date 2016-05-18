@@ -8,15 +8,20 @@ namespace Souse
 {
     internal class RPCServer
     {
+        private string bindPrefix;
         private Thread thread;
         private HttpListener listener;
+
+        public RPCServer(string bindPrefix) {
+            this.bindPrefix = bindPrefix;
+        }
 
         public void Start()
         {
             if (thread != null)
                 return;
             listener = new HttpListener();
-            listener.Prefixes.Add(App.config.RPCBindAddress);
+            listener.Prefixes.Add(bindPrefix);
             thread = new Thread(ThreadEntry);
             thread.Start();
         }
@@ -31,7 +36,7 @@ namespace Souse
             listener = null;
         }
 
-        public void ThreadEntry()
+        private void ThreadEntry()
         {
             listener.Start();
             for (; ; )

@@ -7,7 +7,7 @@ namespace Souse
 {
     internal static class App
 	{
-        public static Config config = new Config();
+        public static Config config;
 		public static AudioMaster audioMaster;
 
 		private static MouseButtons lastButton;
@@ -18,8 +18,9 @@ namespace Souse
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-        private static void Main()
-		{
+        private static void Main() {
+		    App.config = Config.Read();
+
 			// in general, input devices should try to stay super responsive
 			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
 
@@ -30,17 +31,20 @@ namespace Souse
 			audioMaster.ConsonantChanged += ConsonantChanged;
 			audioMaster.Start();
 
-            rpcServer = new RPCServer();
-            rpcServer.Start();
+		    if (App.config.RPCBindPrefix != null) {
+		        rpcServer = new RPCServer(App.config.RPCBindPrefix);
+		        rpcServer.Start();
+		    }
 
-			try
+		    try
 			{
 				Application.Run(new MainForm());
 			}
 			finally
 			{
                 SetKillTimeout();
-                rpcServer.Stop();
+                if (rpcServer != null)
+                    rpcServer.Stop();
 				audioMaster.Dispose();
 			}
 		}
