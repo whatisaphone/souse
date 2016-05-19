@@ -80,24 +80,15 @@ namespace Souse
             }
         }
 
-        private JToken HandleRequest(string method, JArray param)
-        {
-            if (method == "setRunning")
-            {
+        private JToken HandleRequest(string method, JArray param) {
+            if (method == "setRunning") {
                 var running = param[0].Value<bool>();
-                if (running)
-                {
-                    App.audioMaster.Enabled = true;
-                    return new JValue("Audio listening started");
-                }
-                else
-                {
-                    App.audioMaster.Enabled = false;
-                    return new JValue("Audio listening stopped");
-                }
-            }
-            else
-            {
+                App.audioMaster.Enabled = running;
+                return JValue.CreateNull();
+            } else if (method == "reloadConfig") {
+                App.config.Reload();
+                return JValue.CreateNull();
+            } else {
                 throw new ArgumentException("");
             }
         }

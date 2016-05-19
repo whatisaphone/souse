@@ -83,5 +83,9 @@ namespace Souse {
         private void mnuTrayKeyCheck_Click(object sender, EventArgs e) {
             MessageBox.Show(InputState.WhichNonModKeyIsDown().ToString());
         }
+
+        private void mnuReloadConfig_Click(object sender, EventArgs e) {
+            App.config.Reload();
+        }
     }
 }
